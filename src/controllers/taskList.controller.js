@@ -52,8 +52,6 @@ const deleteTask = async (req, res) => {
   try {
     const { data } = req.body;
 
-    console.log(data);
-
     const { code, message } = await taskListService.deleteTask({ data });
 
     return res.status(code).json(message);
@@ -62,4 +60,16 @@ const deleteTask = async (req, res) => {
   }
 };
 
-module.exports = { createTask, updateTask, deleteTask };
+const getTask = async (req, res) => {
+  try {
+    const { sortBy } = req.body;
+
+    const { code, message } = await taskListService.getTask({ sortBy });
+
+    return res.status(code).json(message);
+  } catch (error) {
+    return res.status(error.code).json(error.message);
+  }
+};
+
+module.exports = { createTask, updateTask, deleteTask, getTask };

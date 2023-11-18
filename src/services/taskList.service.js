@@ -112,4 +112,34 @@ const deleteTask = async ({ data }) => {
   return { ...payload };
 };
 
-module.exports = { createTask, updateTask, deleteTask };
+const getTask = async ({ sortBy }) => {
+  let sortQuery = {};
+  let query = {};
+  if (sortBy.date) {
+    if (sortBy.date === "asc") {
+      sortQuery.deadline = 1;
+    } else {
+      sortQuery.deadline = -1;
+    }
+  }
+  if (sortBy.category) {
+    query.category = sortBy.category;
+  }
+
+  if (sortBy.status) {
+    query.status = sortBy.status;
+  }
+
+  const tasks = await TaskList.find({ ...query }).sort({ ...sortQuery });
+
+  return {
+    code: 200,
+    message: tasks.map((task) => {
+      const { name, deadline, category, description, notes, status, deleted } =
+        task;
+      return { name, deadline, category, description, notes, status, deleted };
+    }),
+  };
+};
+
+module.exports = { createTask, updateTask, deleteTask, getTask };
