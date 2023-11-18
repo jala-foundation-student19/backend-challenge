@@ -8,6 +8,15 @@ const createTask = async ({
   notes,
   status,
 }) => {
+  const checkTaskName = await TaskList.findOne({
+    name,
+  });
+
+  if (checkTaskName) {
+    const payload = { code: 400, message: "Name Already Taken" };
+    return { ...payload };
+  }
+
   await TaskList.create({
     name,
     deadline,
