@@ -112,4 +112,34 @@ const deleteTask = async ({ data }) => {
   return { ...payload };
 };
 
-module.exports = { createTask, updateTask, deleteTask };
+const getTask = async ({ sortBy, filterBy }) => {
+  let sortQuery = {};
+  let query = {};
+  if (sortBy.date) {
+    if (sortBy.date === "asc") {
+      sortQuery.deadline = 1;
+    } else {
+      sortQuery.deadline = -1;
+    }
+  }
+  if (filterBy.category) {
+    query.category = filterBy.category;
+  }
+
+  if (filterBy.status) {
+    query.status = filterBy.status;
+  }
+
+  const tasks = await TaskList.find({ ...query }).sort({ ...sortQuery });
+
+  return {
+    code: 200,
+    message: tasks.map((task) => {
+      const { name, deadline, category, description, notes, status, deleted } =
+        task;
+      return { name, deadline, category, description, notes, status, deleted };
+    }),
+  };
+};
+
+module.exports = { createTask, updateTask, deleteTask, getTask };
