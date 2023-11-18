@@ -112,7 +112,7 @@ const deleteTask = async ({ data }) => {
   return { ...payload };
 };
 
-const getTask = async ({ sortBy }) => {
+const getTask = async ({ sortBy, filterBy }) => {
   let sortQuery = {};
   let query = {};
   if (sortBy.date) {
@@ -122,12 +122,12 @@ const getTask = async ({ sortBy }) => {
       sortQuery.deadline = -1;
     }
   }
-  if (sortBy.category) {
-    query.category = sortBy.category;
+  if (filterBy.category) {
+    query.category = filterBy.category;
   }
 
-  if (sortBy.status) {
-    query.status = sortBy.status;
+  if (filterBy.status) {
+    query.status = filterBy.status;
   }
 
   const tasks = await TaskList.find({ ...query }).sort({ ...sortQuery });

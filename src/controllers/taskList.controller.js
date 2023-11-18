@@ -62,9 +62,12 @@ const deleteTask = async (req, res) => {
 
 const getTask = async (req, res) => {
   try {
-    const { sortBy } = req.body;
+    const { sortBy, filterBy } = req.body;
 
-    const { code, message } = await taskListService.getTask({ sortBy });
+    const { code, message } = await taskListService.getTask({
+      sortBy,
+      filterBy,
+    });
 
     return res.status(code).json(message);
   } catch (error) {
