@@ -44,9 +44,22 @@ const updateTask = async (req, res) => {
 
     return res.status(code).json(message);
   } catch (error) {
-    console.log(error);
     return res.status(500).json("Internal System Error");
   }
 };
 
-module.exports = { createTask, updateTask };
+const deleteTask = async (req, res) => {
+  try {
+    const { data } = req.body;
+
+    console.log(data);
+
+    const { code, message } = await taskListService.deleteTask({ data });
+
+    return res.status(code).json(message);
+  } catch (error) {
+    return res.status(error.code).json(error.message);
+  }
+};
+
+module.exports = { createTask, updateTask, deleteTask };

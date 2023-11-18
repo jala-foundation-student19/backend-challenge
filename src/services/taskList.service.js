@@ -1,4 +1,5 @@
 const { TaskList } = require("../models");
+const EditedError = require("../utils/editedError");
 
 const createTask = async ({
   name,
@@ -90,4 +91,25 @@ const updateTask = async ({
   return { ...payload };
 };
 
-module.exports = { createTask, updateTask };
+const deleteTask = async ({ data }) => {
+  const promises = data.map(async (task, index) => {
+    const taskToDelete = await TaskList.findOne({ name: task.name });
+    if (!taskToDelete) {
+      throw new EditedError({
+        code: 500,
+        message: `Task At Index ${index} Not Found`,
+      });
+    }
+    taskToDelete.status = "completed";
+    taskToDelete.deleted = true;
+
+    await taskToDelete.save();
+  });
+
+  await Promise.all(promises);
+
+  const payload = { code: 201, message: "Tasks Deleted" };
+  return { ...payload };
+};
+
+module.exports = { createTask, updateTask, deleteTask };
