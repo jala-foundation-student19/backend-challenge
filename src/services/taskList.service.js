@@ -14,8 +14,7 @@ const createTask = async ({
   });
 
   if (checkTaskName) {
-    const payload = { code: 400, message: "Name Already Taken" };
-    return { ...payload };
+    throw new EditedError({ code: 400, message: "Name Already Taken" });
   }
 
   await TaskList.create({
@@ -40,8 +39,7 @@ const createTask = async ({
     const payload = { code: 201, message: "New Task Created" };
     return { ...payload };
   }
-  const payload = { code: 500, message: "Task Not Created" };
-  return { ...payload };
+  throw new EditedError({ code: 500, message: "Task Not Created" });
 };
 
 const updateTask = async ({
@@ -59,8 +57,7 @@ const updateTask = async ({
   });
 
   if (!toUpdateTask) {
-    const payload = { code: 500, message: "Task Not Found" };
-    return { ...payload };
+    throw new EditedError({ code: 500, message: "Task Not Found" });
   }
 
   if (newName) {

@@ -14,6 +14,9 @@ const createTask = async (req, res) => {
 
     return res.status(code).json(message);
   } catch (error) {
+    if (error.code) {
+      return res.status(error.code).json(error.message);
+    }
     return res.status(500).json("Internal System Error");
   }
 };
@@ -44,6 +47,9 @@ const updateTask = async (req, res) => {
 
     return res.status(code).json(message);
   } catch (error) {
+    if (error.code) {
+      return res.status(error.code).json(error.message);
+    }
     return res.status(500).json("Internal System Error");
   }
 };
@@ -56,7 +62,10 @@ const deleteTask = async (req, res) => {
 
     return res.status(code).json(message);
   } catch (error) {
-    return res.status(error.code).json(error.message);
+    if (error.code) {
+      return res.status(error.code).json(error.message);
+    }
+    return res.status(500).json("Internal System Error");
   }
 };
 
@@ -71,7 +80,10 @@ const getTask = async (req, res) => {
 
     return res.status(code).json(message);
   } catch (error) {
-    return res.status(error.code).json(error.message);
+    if (error.code) {
+      return res.status(error.code).json(error.message);
+    }
+    return res.status(500).json("Internal System Error");
   }
 };
 
